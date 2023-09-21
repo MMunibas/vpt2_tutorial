@@ -1,0 +1,58 @@
+#!/bin/bash
+
+#split command line argument into filename and file extension
+filename="${1%.*}"
+extension="${1##*.}"
+
+if [ -f $filename.out ]; then
+   echo 
+   echo "WARNING: $filename.out exists already"
+   echo "Please delete/rename it first before submitting the job"
+   echo
+   exit 1
+fi
+
+#create submission script
+#write header
+echo "#!/bin/bash"       >  $filename.sh
+echo ""                  >> $filename.sh
+echo "#SBATCH -J $filename"        >> $filename.sh
+echo "#SBATCH -o $filename.o%j"    >> $filename.sh
+echo "#SBATCH -e $filename.e%j"    >> $filename.sh
+#echo "#SBATCH --mem=2G"            >> $filename.sh
+echo "#SBATCH --mem-per-cpu=4G"            >> $filename.sh
+echo "#SBATCH --nodes=1"           >> $filename.sh
+echo "#SBATCH --ntasks=4"           >> $filename.sh
+echo "#SBATCH --cpus-per-task=1"   >> $filename.sh
+echo "#SBATCH --partition=long"  >> $filename.sh
+#echo "#SBATCH --exclude=node109"           >> $filename.sh
+#echo "#SBATCH --nodelist=node45"           >> $filename.sh
+
+
+echo "tdir=/scratch/\$USER/molprojob_\$SLURM_JOB_ID" >> $filename.sh
+echo "mkdir -p \$tdir" >> $filename.sh
+echo "cp \$SLURM_SUBMIT_DIR/$filename.inp \$tdir/" >> $filename.sh
+echo "cd \$tdir" >> $filename.sh
+
+
+#write commands for submitting the job
+echo >> $filename.sh
+echo "#submit job"                               >> $filename.sh
+echo "module load molpro/molpro2022-gcc-9.2.0" >> $filename.sh
+#echo "molpro --ga-impl disk -n 128 -W \$tdir -d \$tdir $1" >> $filename.sh
+#echo "molpro -n 12 -W \$tdir -d \$tdir $1" >> $filename.sh
+#echo "molpro -n 4 -W /data/kaeser/nnprojects/molpro_tmp -d /data/kaeser/nnprojects/molpro_tmp $1" >> $filename.sh
+echo "molpro -W \$tdir -d \$tdir $1" >> $filename.sh
+echo "cp *.out \$SLURM_SUBMIT_DIR/" >> $filename.sh
+#echo "cp *.molden \$SLURM_SUBMIT_DIR/" >> $filename.sh
+
+
+echo "rm \$SLURM_SUBMIT_DIR/$filename.sh" >> $filename.sh
+echo "rm -r \$tdir" >> $filename.sh
+
+#finally, submit the job
+sbatch $filename.sh
+
+
+                                                                                                                                                                  
+                                                                                                                                                 
