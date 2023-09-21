@@ -1,0 +1,71 @@
+README / HOWTO for the usage of the transfer learned NN model for FAM/FAD presented in
+Käser and Meuwly: Phys. Chem. Chem. Phys.,2022, 24, 5269. The PES is transfer learnt
+to CCSD(T)/aug-cc-pVTZ level quality and can be used to predict energies, forces, 
+dipole moments and partial charges. The README will walk through the dependencies
+which are needed as well as a few illustrative examples for using the PES.
+
+
+2) Folders =====================================================================
+i) "tl_models": contains the NN models used throughout the paper. These files
+   can be used to predict energies, forces, dipole moments, to run MD
+   simulations, to predict normalmodes, etc. The folder contains:
+       -tl_866_fad_ccsdt: starting from an MP2 model, the present model was transfer
+            learnt to CCSD(T) quality using 866 (425 for FAM and 441 for FAD) ab initio
+            points. 
+
+ii) "NNCalculator": in ase a calculator is a black box taking atomic number and
+     atomic position from an "atoms object" and calculate different properties
+     [see:https://wiki.fysik.dtu.dk/ase/ase/calculators/calculators.html].
+     ASE offers quite a large number of calculators and it is quite easy to
+     implement new ones. The NNCalculator thus uses Physnet models and predicts
+     properties based on a molecule.
+iii) "HessianNNCalculator": same as NNCalculator but able to predict the hessian
+     of a given molecule/geometry.
+iv) "abinit": folder containing example ab initio optimizations at CCSD(T) level
+     of theory carried out using MOLPRO. For FAM, the ab initio frequencies are
+     given as well. 
+================================================================================
+
+3) Files =======================================================================
+i) "fam.xyz & fad.xyz & fad_ts.xyz": xyz files of the monomer, dimer and TS for double
+   proton transfer. The structures are very close to the optimum geometry.
+ii) "Traj2Xyz.py": script to convert a trajectory file (.traj) (a main file format in
+    ase) to the more common .xyz file.
+iii) "xyz_to_traj.xyz": script to do the reverse conversion.
+iv) "output_fam.dat": File containing the output for the prediction of fam.xyz using the
+    PhysNet model.
+================================================================================
+
+4) Examples of Use: ============================================================
+i) Energy, force and dipole moment prediction of a molecular geometry using
+   "predict_mol.py". (The usage of the script is given in itself). Note that the
+   units of the prediction are the same as the ones used in the training data
+   set. Here, the energies are printed in eV, the forces in eV/angstrom and the
+   dipole moments in elementary charges*angstrom. 
+ii) Having a full dimensional potential one probably wants to perform geometry
+    optimizations for different molecules. This can be done with the
+    "optimize_coarse.py" script. When one is sure that the structure is already
+    close to the optimum, one can use the "optimize_crit_fine.py" to further
+    optimize the structure. "optimize_crit_fine.py" can also be used for TS
+    optimization, however, a good estimate is needed!
+iii) The NN potential can also be used to predict normal mode frequencies. Here,
+    the HessianNNCalculator is used (which calculates the hessian and takes
+    longer to evaluate) in combination with the "NN_NM.py" script. Remember to
+    optimize the structure first! Alternatively, the frequencies can be
+    calculated using ASEs "vibrations" class.  A possible implementation is
+    given in "ase_vibrations.py" (The vibrational modes are calculated from a
+    finite difference approximation of the Hessian matrix.).
+
+
+
+How to cite:=====================================================================
+When using this PhysNet PES for FAM and FAD, please cite the following papers:
+
+Unke, O. T. and Meuwly, M "PhysNet: A Neural Network for Predicting Energies,
+Forces, Dipole Moments, and Partial Charges", J. Chem. Theory Comput. 2019,
+15, 6, 3678–3693
+
+Käser, S. and Meuwly, M. "Transfer learned potential energy surfaces: accurate
+anharmonic vibrational dynamics and dissociation energies for the formic acid
+monomer and dimer", Phys. Chem. Chem. Phys., 2022, 24, 5269-5281.
+

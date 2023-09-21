@@ -1,0 +1,13 @@
+Running ./predict_mol.py -i fam.xyz will generate the output below. Note that
+modifying the .xyz file will certainly change the output as well. It is possible
+that numerical errors lead to slight differences.
+
+Epot = -21.190715789794922
+F = [[ 2.1830201e-06  8.6799264e-07 -4.2319298e-06]
+ [-3.4570694e-06 -7.7858567e-07  4.1723251e-07]
+ [ 2.0861626e-06 -4.3213367e-07  4.1967724e-06]
+ [ 1.1920929e-06  4.5262277e-07  2.5331974e-07]
+ [-1.5199184e-06 -2.0861626e-07 -5.9604645e-07]]
+mu = [-0.08942766  0.03820543 -0.28570911]
+mu = [-0.42953937  0.1835085  -1.37231935]
+partial charges = [ 0.26720166  0.11456425 -0.35747725 -0.3539627   0.32967398]
