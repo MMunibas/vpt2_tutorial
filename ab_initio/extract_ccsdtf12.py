@@ -17,7 +17,7 @@ for path, dirs, files in os.walk("ch2o_ccf12_inp_molpro"):
 file_list = np.sort(file_list)
 #print(file_list)
 #quit()
-Nmax = 7
+Nmax = 6
 
 num = len(file_list)
 N = np.zeros([num], dtype=int)
@@ -120,6 +120,6 @@ E *= Hartree  # *27.211386024367243 conversion to eV
 D *= Debye # *0.20819433442462576 conversion to e*angstrom
 F *= Hartree/Bohr # *27.211386024367243/0.5291772105638411 conversion to eV/angstrom
 
-np.savez_compressed("test.npz", N=N, E=E, Q=Q, D=D, Z=Z, R=R, F=F)
+np.savez_compressed("dataset.npz", N=N, E=E, Q=Q, D=D, Z=Z, R=R, F=F)
 
 
