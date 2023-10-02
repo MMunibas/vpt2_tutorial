@@ -4,6 +4,6 @@ do
     filename="${i%.*}"
     if [ ! -f $filename.out ]
     then
-        echo "molprosub" $filename.inp
+        echo "molpro2022_par" $filename.inp
     fi
 done
