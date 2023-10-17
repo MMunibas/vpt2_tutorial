@@ -11,7 +11,7 @@
 
 hostname
 
-module load gcc/gcc4.8.5-openmpi1.10-cuda9.2
+module load gcc/gcc4.8.5-openmpi1.10-cuda9.0
 
 #input file
 input=run_waterdimer.inp
